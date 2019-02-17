@@ -1,24 +1,26 @@
 <template>
   <div id="app">
+    <battle-field-computer></battle-field-computer>
   </div>
 </template>
 
 <script>
+import BattleFieldComputer from './components/BattleFieldComputer.vue';
 
 export default {
   name: 'app',
   components: {
+    BattleFieldComputer
   }
 }
 </script>
 
 <style lang="less">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  width: 800px;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 }
 </style>
