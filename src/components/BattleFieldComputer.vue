@@ -16,6 +16,8 @@
 import BattleFieldMixin from '../mixins/BattleFieldMixin.js';
 import BattleFieldComputerSquare from './BattleFieldComputerSquare.vue';
 
+import Numbers from '../helpers/Numbers';
+
 export default {
     name: "BattleFieldComputer",
     mixins: [BattleFieldMixin],
@@ -38,6 +40,58 @@ export default {
 			return {}
         },
         methods: {
+    		checkAvailableSquares(startNumber, squaresCnt) {
+    			if (this.startDeck[startNumber].marked !== 0) return false;
+    			let randomBoolean = Numbers.getRandomBoolean();
+
+    			if (randomBoolean) {
+    				let verticalSquares = this.checkAvailableSquaresVertically(startNumber, squaresCnt);
+    				if (verticalSquares.length === squaresCnt) return verticalSquares;
+
+    				let horizontalSquares = this.checkAvailableSquaresHorizontally(startNumber, squaresCnt);
+    				if (horizontalSquares.length === squaresCnt) return horizontalSquares;
+				} else {
+					let horizontalSquares = this.checkAvailableSquaresHorizontally(startNumber, squaresCnt);
+					if (horizontalSquares.length === squaresCnt) return horizontalSquares;
+
+					let verticalSquares = this.checkAvailableSquaresVertically(startNumber, squaresCnt);
+					if (verticalSquares.length === squaresCnt) return verticalSquares;
+				}
+
+    			return false;
+			},
+			checkAvailableSquaresHorizontally(startNumber, squaresCnt) {
+				let horizontal = [startNumber];
+				let availableCnt = 0;
+
+				for (let i = 1; i < squaresCnt; i++)
+				{
+					let conditionRight = startNumber + i;
+
+					if (conditionRight % 10 && this.startDeck[conditionRight].marked === 0) {
+						horizontal.push(conditionRight);
+					} else {
+						break;
+					}
+				}
+
+				if (horizontal.length === squaresCnt) return horizontal;
+				availableCnt = squaresCnt - horizontal.length;
+
+				for (let i = 1; i < availableCnt; i++)
+				{
+					let conditionLeft = startNumber - i;
+
+					if ((conditionLeft % 10 !== 9) && conditionLeft > -1 && this.startDeck[conditionLeft].marked === 0) {
+						horizontal.push(conditionLeft);
+					} else {
+						break;
+					}
+				}
+
+				if (horizontal.length === squaresCnt) return horizontal;
+				return [startNumber];
+			},
 			checkAvailableSquaresVertically(startNumber, squaresCnt) {
 				let vertical = [startNumber];
 				let availableCnt = 0;
