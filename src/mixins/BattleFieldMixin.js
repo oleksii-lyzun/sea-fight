@@ -33,15 +33,15 @@ export default {
                 switch (square % 10) {
                     case 0:
                         let forbiddenZero = this.getForbiddenSquare(this.zerosMap, square);
-                        if (forbiddenZero) forbiddenSquares.push(forbiddenZero);
+                        if (forbiddenZero || forbiddenZero === 0) forbiddenSquares.push(forbiddenZero);
                         break;
                     case 9:
                         let forbiddenNine = this.getForbiddenSquare(this.ninesMap, square);
-                        if (forbiddenNine) forbiddenSquares.push(forbiddenNine);
+                        if (forbiddenNine || forbiddenNine === 0) forbiddenSquares.push(forbiddenNine);
                         break;
                     default:
                         let forbiddenSquare = this.getForbiddenSquare(this.generalMap, square);
-                        if (forbiddenSquare) forbiddenSquares.push(forbiddenSquare);
+                        if (forbiddenSquare || forbiddenSquare === 0) forbiddenSquares.push(forbiddenSquare);
                         break;
                 }
             });
