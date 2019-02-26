@@ -1,8 +1,8 @@
 <template>
 	<div class="deck-computer">
 		<battle-field-computer-square
-			v-for="square in startDeck"
-			:key="`${square.xAxis}${square.yAxis}`"
+			v-for="(square, idx) in startDeck"
+			:key="idx"
 			:x="square.xAxis"
 			:y="square.yAxis"
 			:mark-status="square.marked"
@@ -13,9 +13,10 @@
 </template>
 
 <script>
-import BattleFieldMixin from '../mixins/BattleFieldMixin.js';
+// Components
 import BattleFieldComputerSquare from './BattleFieldComputerSquare.vue';
-
+// Mixins and helpers
+import BattleFieldMixin from '../mixins/BattleFieldMixin.js';
 import Numbers from '../helpers/Numbers';
 
 export default {
@@ -37,9 +38,53 @@ export default {
 			}
 		},
 		data() {
-			return {}
+			return {
+				// import from BattleFieldMixin presented
+			}
         },
+		computed: {
+    		/*
+    			Returns all unmarked indexes from startDeck
+    			Unmarked squares are accessible as this.startDeck[this.unmarkedSquares[0]]
+    		 */
+    		unmarkedSquares() {
+    			return this.startDeck.map((square, idx) => {
+    				if (square.marked === 0) return idx;
+				}).filter(square => square);
+			}
+		},
         methods: {
+    		// import from BattleFieldMixin presented
+			buildOneSquareShip() {
+				let randomInt = Numbers.getRandomInt(this.unmarkedSquares.length);
+
+				let availableSquare = [this.unmarkedSquares[randomInt]];
+				this.markAvailableSquares(availableSquare);
+
+				let forbiddenSquares = this.markForbiddenSquares(availableSquare);
+				let ship = [[... availableSquare, [...forbiddenSquares]]];
+
+				this.ships = this.ships.concat(ship);
+			},
+    		buildNthSquaresShip(squaresCnt) {
+    			let randomInt = Numbers.getRandomInt(this.unmarkedSquares.length);
+
+    			let availableSquares = this.checkAvailableSquares(this.unmarkedSquares[randomInt], squaresCnt);
+				if (!availableSquares) return this.buildNthSquaresShip(squaresCnt);
+
+				this.markAvailableSquares(availableSquares);
+
+				let forbiddenSquares = this.markForbiddenSquares(availableSquares);
+				let ship = [[... availableSquares, [...forbiddenSquares]]];
+
+				this.ships = this.ships.concat(ship);
+			},
+    		markAvailableSquares(squares, marked = 2, clicked = false) {
+    			squares.map(square => {
+    				this.startDeck[square].marked = marked;
+					this.startDeck[square].clicked = clicked;
+				});
+			},
     		checkAvailableSquares(startNumber, squaresCnt) {
     			if (this.startDeck[startNumber].marked !== 0) return false;
     			let randomBoolean = Numbers.getRandomBoolean();
@@ -125,7 +170,25 @@ export default {
             squareWasClicked(num) {
                 console.log('Clicked!');
             }
-        }
+        },
+		mounted() {
+			this.buildNthSquaresShip(4);
+
+			this.buildNthSquaresShip(3);
+			this.buildNthSquaresShip(3);
+
+			this.buildNthSquaresShip(2);
+			this.buildNthSquaresShip(2);
+			this.buildNthSquaresShip(2);
+
+			this.buildOneSquareShip();
+			this.buildOneSquareShip();
+			this.buildOneSquareShip();
+			this.buildOneSquareShip();
+
+			console.log('ships', this.ships);
+			console.log('startDeck', this.startDeck);
+		}
 }
 </script>
 
