@@ -1,7 +1,7 @@
 <template>
 	<div class="deck-computer">
 		<battle-field-computer-square
-			v-for="(square, idx) in startDeck"
+			v-for="(square, idx) in stateStartDeck"
 			:key="idx"
 			:x="square.xAxis"
 			:y="square.yAxis"
@@ -51,7 +51,10 @@ export default {
     			return this.startDeck.map((square, idx) => {
     				if (square.marked === 0) return idx;
 				}).filter(square => square);
-			}
+			},
+			stateStartDeck() {
+    			return this.$store.state.computerStartDeck;
+			},
 		},
         methods: {
     		// import from BattleFieldMixin presented
@@ -167,27 +170,12 @@ export default {
 				if (vertical.length === squaresCnt) return vertical;
 				return [startNumber];
 			},
-            squareWasClicked(num) {
-                console.log('Clicked!');
+            squareWasClicked(squareIdx) {
+				this.$store.commit('setUserShot', squareIdx);
             }
         },
 		mounted() {
-			this.buildNthSquaresShip(4);
 
-			this.buildNthSquaresShip(3);
-			this.buildNthSquaresShip(3);
-
-			this.buildNthSquaresShip(2);
-			this.buildNthSquaresShip(2);
-			this.buildNthSquaresShip(2);
-
-			this.buildOneSquareShip();
-			this.buildOneSquareShip();
-			this.buildOneSquareShip();
-			this.buildOneSquareShip();
-
-			console.log('ships', this.ships);
-			console.log('startDeck', this.startDeck);
 		}
 }
 </script>

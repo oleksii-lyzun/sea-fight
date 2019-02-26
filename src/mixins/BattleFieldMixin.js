@@ -23,42 +23,43 @@ export default {
     },
     created() {
         this.createStartDeck();
+        this.createStartDeckWithShips();
+        this.$store.commit('initializeComputerStartDeck', this.startDeck);
+        this.$store.commit('initializeComputerShips', this.ships);
     },
     methods: {
         markForbiddenSquares(squares) {
             let forbiddenSquares = [];
 
-            squares.map(square => {
-
-                switch (square % 10) {
-                    case 0:
-                        let forbiddenZero = this.getForbiddenSquare(this.zerosMap, square);
-                        if (forbiddenZero || forbiddenZero === 0) forbiddenSquares.push(forbiddenZero);
-                        break;
-                    case 9:
-                        let forbiddenNine = this.getForbiddenSquare(this.ninesMap, square);
-                        if (forbiddenNine || forbiddenNine === 0) forbiddenSquares.push(forbiddenNine);
-                        break;
-                    default:
-                        let forbiddenSquare = this.getForbiddenSquare(this.generalMap, square);
-                        if (forbiddenSquare || forbiddenSquare === 0) forbiddenSquares.push(forbiddenSquare);
-                        break;
+            squares.map(el => {
+                if (el % 10 === 0) {
+                    this.zerosMap.map(m => {
+                        if ((el + (m) > - 1) && (el + (m) < 100) && this.startDeck[el + (m)].marked !== 2) {
+                            this.startDeck[el + (m)].marked = 1;
+                            let sq = el + (m);
+                            forbiddenSquares.push(sq);
+                        }
+                    })
+                } else if (el % 10 === 9) {
+                    this.ninesMap.map(m => {
+                        if ((el + (m) > - 1) && (el + (m) < 100) && this.startDeck[el + (m)].marked !== 2) {
+                            this.startDeck[el + (m)].marked = 1;
+                            let sq = el + (m);
+                            forbiddenSquares.push(sq);
+                        }
+                    })
+                } else {
+                    this.generalMap.map(m => {
+                        if ((el + (m) > - 1) && (el + (m) < 100) && this.startDeck[el + (m)].marked !== 2) {
+                            this.startDeck[el + (m)].marked = 1;
+                            let sq = el + (m);
+                            forbiddenSquares.push(sq);
+                        }
+                    })
                 }
             });
 
             return Arrays.unique(forbiddenSquares);
-        },
-        getForbiddenSquare(allowedMap, square) {
-            allowedMap.map(el => {
-                let forbiddenSquare = square + (el);
-
-                if ((forbiddenSquare > -1) && (forbiddenSquare < 100) && this.startDeck[forbiddenSquare].marked !== 2) {
-                    this.startDeck[square + (el)].marked = 1;
-                    return forbiddenSquare;
-                }
-
-                return false;
-            })
         },
         createStartDeck() {
             for (let y = 0; y < this.columns; y++) {
@@ -66,6 +67,21 @@ export default {
                     this.startDeck.push({xAxis: x, yAxis: y, marked: 0, clicked: false})
                 }
             }
+        },
+        createStartDeckWithShips() {
+            this.buildNthSquaresShip(4);
+
+            this.buildNthSquaresShip(3);
+            this.buildNthSquaresShip(3);
+
+            this.buildNthSquaresShip(2);
+            this.buildNthSquaresShip(2);
+            this.buildNthSquaresShip(2);
+
+            this.buildOneSquareShip();
+            this.buildOneSquareShip();
+            this.buildOneSquareShip();
+            this.buildOneSquareShip();
         }
     }
 }
