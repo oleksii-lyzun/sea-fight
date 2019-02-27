@@ -2,9 +2,7 @@
 	<div
 		class="user-square"
 		:class="
-			[
-				(isClicked) && markStatus === 2 ? 'marked' : ''
-			]"
+			[ markStatus === 2 ? 'marked' : '' ]"
 		@click="onSquareClick()"
 	>
 		{{ x }}:{{ y }}
