@@ -23,9 +23,6 @@ export default {
     },
     created() {
         this.createStartDeck();
-        this.createStartDeckWithShips();
-        this.$store.commit('initializeComputerStartDeck', this.startDeck);
-        this.$store.commit('initializeComputerShips', this.ships);
     },
     methods: {
         markForbiddenSquares(squares) {
@@ -68,20 +65,5 @@ export default {
                 }
             }
         },
-        createStartDeckWithShips() {
-            this.buildNthSquaresShip(4);
-
-            this.buildNthSquaresShip(3);
-            this.buildNthSquaresShip(3);
-
-            this.buildNthSquaresShip(2);
-            this.buildNthSquaresShip(2);
-            this.buildNthSquaresShip(2);
-
-            this.buildOneSquareShip();
-            this.buildOneSquareShip();
-            this.buildOneSquareShip();
-            this.buildOneSquareShip();
-        }
     }
 }

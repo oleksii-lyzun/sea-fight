@@ -1,15 +1,18 @@
 <template>
   <div id="app">
     <battle-field-computer></battle-field-computer>
+    <battle-field-user></battle-field-user>
   </div>
 </template>
 
 <script>
 import BattleFieldComputer from './components/BattleFieldComputer.vue';
+import BattleFieldUser from './components/BattleFieldUser.vue';
 
 export default {
   name: 'app',
   components: {
+    BattleFieldUser,
     BattleFieldComputer
   }
 }
