@@ -1,6 +1,9 @@
 <template>
 	<div class="root">
-		<circle-chart></circle-chart>
+		<circle-chart :val="percentOfFourShips"></circle-chart>
+		<circle-chart :val="percentOfThreeShips"></circle-chart>
+		<circle-chart :val="percentOfTwoShips"></circle-chart>
+		<circle-chart :val="percentOfOneShip"></circle-chart>
 	</div>
 </template>
 
@@ -19,8 +22,19 @@ export default {
 			type: Object,
 		},
 	},
-	methods: {
-
+	computed: {
+		percentOfFourShips() {
+			return (this.cnt.four * 100);
+		},
+		percentOfThreeShips() {
+			return (this.cnt.three * 100 / 2);
+		},
+		percentOfTwoShips() {
+			return (this.cnt.two * 100 / 3);
+		},
+		percentOfOneShip() {
+			return (this.cnt.one * 100 / 4);
+		}
 	}
 }
 </script>
