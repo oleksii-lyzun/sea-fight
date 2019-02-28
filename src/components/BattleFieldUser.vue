@@ -11,12 +11,14 @@
 				@square-clicked="squareWasClicked"
 			></BattleFieldUserSquare>
 		</div>
+		<user-footer :cnt="shipsCnt"></user-footer>
 	</div>
 </template>
 
 <script>
 	// Components
 	import BattleFieldUserSquare from './BattleFieldUserSquare.vue';
+	import UserFooter from './UserFooter';
 	// Mixins and helpers
 	import BattleFieldMixin from '../mixins/BattleFieldMixin.js';
 	import Arrays from '../helpers/Arrays';
@@ -26,6 +28,7 @@
 	mixins: [BattleFieldMixin],
 	components: {
 		BattleFieldUserSquare,
+		UserFooter
 	},
 	props: {
 		rows: {
