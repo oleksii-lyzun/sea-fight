@@ -1,14 +1,16 @@
 <template>
-	<div class="deck-user">
-		<BattleFieldUserSquare
-			v-for="square in startDeck"
-			:key="`${square.xAxis}${square.yAxis}`"
-			:x="square.xAxis"
-			:y="square.yAxis"
-			:mark-status="square.marked"
-			:is-clicked="square.clicked"
-			@square-clicked="squareWasClicked"
-		></BattleFieldUserSquare>
+	<div class="root">
+		<div class="deck-user">
+			<BattleFieldUserSquare
+				v-for="square in startDeck"
+				:key="`${square.xAxis}${square.yAxis}`"
+				:x="square.xAxis"
+				:y="square.yAxis"
+				:mark-status="square.marked"
+				:is-clicked="square.clicked"
+				@square-clicked="squareWasClicked"
+			></BattleFieldUserSquare>
+		</div>
 	</div>
 </template>
 
@@ -74,29 +76,74 @@
 		totalShipsCnt() {
 			return this.ships.length;
 		},
+		shipsPlacedCorrectly() {
+			if (!this.shipsCnt) return false;
+
+			let s = this.shipsCnt;
+			return s.one === 4 && s.two === 3 && s.three === 2 && s.four === 1;
+		}
 	},
 	methods: {
 		squareWasClicked(status) {
 			this.addShip(status);
 		},
 		addShip(status) {
-			console.log('status', status);
 			let squareNumber = status.num;
 			let clickedStatus = status.clickedStatus;
 
 			let diagonalClick = this.checkDiagonal(squareNumber);
 			if (diagonalClick) return;
 
-			let updatedShip = this.updateShips(squareNumber, clickedStatus);
-			if (!updatedShip) return;
-
-			this.setMarkedStatus(squareNumber, clickedStatus);
+			this.updateShips(squareNumber, clickedStatus);
 			console.log('this.ships', this.ships);
 		},
 		updateShips(squareNumber, clickedStatus) {
 			if (clickedStatus) {
-				return this.addToShip(squareNumber, clickedStatus);
+				let shipAdded = this.addToShip(squareNumber, clickedStatus);
+				if (shipAdded) this.setMarkedStatus(squareNumber, clickedStatus);
+				return shipAdded;
+			} else {
+				let shipDeleted = this.deleteFromShip(squareNumber, clickedStatus);
+				if (shipDeleted) this.setMarkedStatus(squareNumber, clickedStatus);
+				return shipDeleted;
 			}
+		},
+		deleteFromShip(squareNumber) {
+			let shipIndex = this.findShipForDeletion(squareNumber);
+
+			if (this.ships[shipIndex].length === 1) {
+				this.ships.splice(shipIndex, 1);
+				return true;
+			} else {
+				return this.splitOneShip(shipIndex, squareNumber);
+			}
+		},
+		splitOneShip(shipIndex, squareNumber) {
+			let ship = Arrays.clone(this.ships[shipIndex], true);
+			let squareIndex = ship.indexOf(squareNumber);
+
+			if (squareIndex === 0 || squareIndex === (ship.length - 1)) {
+				ship.splice(squareIndex, 1);
+
+				this.ships.splice(shipIndex, 1);
+				this.ships = [...this.ships, ship];
+				return true;
+
+			} else {
+				let newShips = Arrays.divideIntoTwoParts(ship, squareIndex);
+				if (this.ships.length < 10) {
+					this.ships.splice(shipIndex, 1);
+					this.ships = [...this.ships, newShips.firstArr, newShips.secondArr];
+					return true;
+				}
+			}
+		},
+		findShipForDeletion(squareNumber) {
+			let idx = null;
+			this.ships.map((ship, index) => {
+				if (ship.indexOf(squareNumber) !== -1) idx = index;
+			});
+			return idx;
 		},
 		addToShip(squareNumber) {
 			let cnt = [];
@@ -137,17 +184,9 @@
 			let newShip = [...this.ships[cnt[0]], ...this.ships[cnt[1]]];
 			if (newShip.length > 3) return isAdded = false;
 
-			let conditionForNewShipCreation = (
-				(newShip.length === 3 && this.shipsCnt.four === 0) ||
-				(newShip.length === 2 && this.shipsCnt.three < 2) ||
-				(newShip.length === 1 && this.shipsCnt.two < 3)
-			);
-
-			if (conditionForNewShipCreation) {
-				isAdded = true;
-				this.ships = Arrays.removeValues(this.ships, cnt);
-				this.ships.push([...newShip, squareNumber]);
-			}
+			isAdded = true;
+			this.ships = Arrays.removeValues(this.ships, cnt);
+			this.ships.push([...newShip, squareNumber]);
 
 			return isAdded;
 		},
@@ -162,16 +201,9 @@
 					if (parts.indexOf(square) !== -1) {
 						let shipLength = this.ships[i].length;
 
-						if (shipLength === 4) isAdded = false;
-						if (shipLength === 3 && this.shipsCnt.four === 0) {
-							isAdded = true;
-							this.ships[i].push(squareNumber);
-						}
-						if (shipLength === 2 && this.shipsCnt.three < 2) {
-							isAdded = true;
-							this.ships[i].push(squareNumber);
-						}
-						if (shipLength === 1 && this.shipsCnt.two < 3) {
+						if (shipLength === 4) {
+							isAdded = false;
+						} else {
 							isAdded = true;
 							this.ships[i].push(squareNumber);
 						}
@@ -180,9 +212,6 @@
 			}
 
 			return isAdded;
-		},
-		deleteFromShip() {
-			console.log('Not ready');
 		},
 		setMarkedStatus(square, clickedStatus) {
 			if (clickedStatus) {
