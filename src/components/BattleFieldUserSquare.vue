@@ -40,7 +40,7 @@
 		methods: {
 			onSquareClick() {
 				let num = Numbers.switchCoordinatesToNumber(this.x, this.y);
-				this.clicked = !this.clicked;
+				this.clicked = this.markStatus !== 2;
 
 				let status = { num, clickedStatus : this.clicked };
 				this.$emit('square-clicked', status);

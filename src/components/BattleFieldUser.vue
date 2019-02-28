@@ -13,14 +13,13 @@
 </template>
 
 <script>
-// Components
-import BattleFieldUserSquare from './BattleFieldUserSquare.vue';
-// Mixins and helpers
-import BattleFieldMixin from '../mixins/BattleFieldMixin.js';
-import Numbers from '../helpers/Numbers';
-import Arrays from '../helpers/Arrays';
+	// Components
+	import BattleFieldUserSquare from './BattleFieldUserSquare.vue';
+	// Mixins and helpers
+	import BattleFieldMixin from '../mixins/BattleFieldMixin.js';
+	import Arrays from '../helpers/Arrays';
 
-export default {
+	export default {
 	name: "BattleFieldUser",
 	mixins: [BattleFieldMixin],
 	components: {
@@ -81,25 +80,27 @@ export default {
 			this.addShip(status);
 		},
 		addShip(status) {
+			console.log('status', status);
 			let squareNumber = status.num;
 			let clickedStatus = status.clickedStatus;
 
 			let diagonalClick = this.checkDiagonal(squareNumber);
 			if (diagonalClick) return;
 
-			this.updateShips(squareNumber, clickedStatus);
+			let updatedShip = this.updateShips(squareNumber, clickedStatus);
+			if (!updatedShip) return;
 
 			this.setMarkedStatus(squareNumber, clickedStatus);
+			console.log('this.ships', this.ships);
 		},
 		updateShips(squareNumber, clickedStatus) {
 			if (clickedStatus) {
-				this.addToShip(squareNumber, clickedStatus);
+				return this.addToShip(squareNumber, clickedStatus);
 			}
 		},
 		addToShip(squareNumber) {
 			let cnt = [];
 			let parts = null;
-			let isAdded = null;
 
 			if (squareNumber % 10 === 0) {
 				parts = this.allowedSquaresZeros.map(el => squareNumber + (el)).filter(el => el > -1 && el < 100);
@@ -118,39 +119,31 @@ export default {
 			});
 
 			if (cnt.length === 2) {
-				isAdded = this.glueTwoShips(cnt, squareNumber);
-			} else {
-				isAdded = this.extendOneShip(parts, squareNumber);
+				return this.glueTwoShips(cnt, squareNumber);
+			}
+			if (cnt.length === 1) {
+				return this.extendOneShip(parts, squareNumber);
 			}
 
-			if (isAdded === null && this.totalShipsCnt < 10) {
-				this.ships = [...this.ships, [squareNumber]];
-				isAdded = true;
-			} else {
-				isAdded = false;
+			if (this.totalShipsCnt < 10) {
+				return this.ships = [...this.ships, [squareNumber]];
 			}
 
-			console.log('this.ships', this.ships);
-
-			return isAdded;
+			return false;
 		},
 		glueTwoShips(cnt, squareNumber) {
 			let isAdded = null;
 
 			let newShip = [...this.ships[cnt[0]], ...this.ships[cnt[1]]];
+			if (newShip.length > 3) return isAdded = false;
 
-			if (newShip.length === 4) isAdded = false;
-			if (newShip.length === 3 && this.shipsCnt.four === 0) {
-				isAdded = true;
-				this.ships = Arrays.removeValues(this.ships, cnt);
-				this.ships.push([...newShip, squareNumber]);
-			}
-			if (newShip.length === 2 && this.shipsCnt.three < 2) {
-				isAdded = true;
-				this.ships = Arrays.removeValues(this.ships, cnt);
-				this.ships.push([...newShip, squareNumber]);
-			}
-			if (newShip.length === 1 && this.shipsCnt.two < 3) {
+			let conditionForNewShipCreation = (
+				(newShip.length === 3 && this.shipsCnt.four === 0) ||
+				(newShip.length === 2 && this.shipsCnt.three < 2) ||
+				(newShip.length === 1 && this.shipsCnt.two < 3)
+			);
+
+			if (conditionForNewShipCreation) {
 				isAdded = true;
 				this.ships = Arrays.removeValues(this.ships, cnt);
 				this.ships.push([...newShip, squareNumber]);
