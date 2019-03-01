@@ -27,13 +27,13 @@ export default {
 			return (this.cnt.four * 100);
 		},
 		percentOfThreeShips() {
-			return (this.cnt.three * 100 / 2);
+			return (this.cnt.three * 100 / 2).toFixed();
 		},
 		percentOfTwoShips() {
-			return (this.cnt.two * 100 / 3);
+			return (this.cnt.two * 100 / 3).toFixed();
 		},
 		percentOfOneShip() {
-			return (this.cnt.one * 100 / 4);
+			return (this.cnt.one * 100 / 4).toFixed();
 		}
 	}
 }

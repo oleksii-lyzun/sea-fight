@@ -1,6 +1,6 @@
 <template>
 	<div class="single-chart">
-		<svg viewBox="0 0 36 36" class="circular-chart orange">
+		<svg viewBox="0 0 36 36" class="circular-chart green">
 			<path class="circle-bg"
 				  d="M18 2.0845
 					  a 15.9155 15.9155 0 0 1 0 31.831
@@ -67,16 +67,8 @@
 		}
 	}
 
-	.circular-chart.orange .circle {
-		stroke: #ff9f00;
-	}
-
 	.circular-chart.green .circle {
-		stroke: #4CC790;
-	}
-
-	.circular-chart.blue .circle {
-		stroke: #3c9ee5;
+		stroke: #1aff00;
 	}
 
 	.percentage {
