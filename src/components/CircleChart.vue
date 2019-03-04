@@ -22,7 +22,6 @@
 		name: "CircleChart",
 		props: {
 			val: {
-				type: Number,
 				required: true,
 			}
 		},

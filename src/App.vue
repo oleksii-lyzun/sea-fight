@@ -19,6 +19,9 @@ export default {
 </script>
 
 <style lang="less">
+@import "styles/singles";
+@import "styles/variables";
+
 #app {
   display: flex;
   width: 800px;

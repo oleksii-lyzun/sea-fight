@@ -11,7 +11,7 @@
 				@square-clicked="squareWasClicked"
 			></BattleFieldUserSquare>
 		</div>
-		<user-footer :cnt="shipsCnt"></user-footer>
+		<user-footer :cnt="shipsCnt" @user-started-game="gameStartRequest"></user-footer>
 	</div>
 </template>
 
@@ -78,15 +78,12 @@
 		},
 		totalShipsCnt() {
 			return this.ships.length;
-		},
-		shipsPlacedCorrectly() {
-			if (!this.shipsCnt) return false;
-
-			let s = this.shipsCnt;
-			return s.one === 4 && s.two === 3 && s.three === 2 && s.four === 1;
 		}
 	},
 	methods: {
+		gameStartRequest(status) {
+			console.log('Game started!', status);
+		},
 		squareWasClicked(status) {
 			this.addShip(status);
 		},
