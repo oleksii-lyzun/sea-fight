@@ -82,7 +82,24 @@
 	},
 	methods: {
 		gameStartRequest(status) {
-			console.log('Game started!', status);
+			if (status === 'refresh') return this.refreshAllShips();
+			if (status === 'start') {
+				this.ships = this.ships.map(ship => {
+					let forbidden = this.markForbiddenSquares(ship);
+					ship = [...ship, [...forbidden]];
+					return ship;
+				});
+
+				console.log('markedUser', this.ships);
+			}
+		},
+		refreshAllShips() {
+			this.ships.map(ship => {
+				ship.map(square => {
+					this.startDeck[square].marked = 0;
+				});
+			});
+			this.ships = [];
 		},
 		squareWasClicked(status) {
 			this.addShip(status);
