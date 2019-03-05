@@ -55,6 +55,9 @@ export default {
 		stateStartDeck() {
 			return this.$store.state.computerStartDeck;
 		},
+		isUserMove() {
+			return this.$store.state.userMove === 1;
+		},
 	},
 	methods: {
 		// import from BattleFieldMixin presented

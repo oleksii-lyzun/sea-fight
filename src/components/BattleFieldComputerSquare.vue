@@ -38,9 +38,17 @@
 				required: true
 			}
 		},
+		computed: {
+			isGameStarted() {
+				return this.$store.state.gameStarted;
+			},
+			isUserMove() {
+				return this.$store.state.userMove === 1;
+			}
+		},
 		methods: {
 			onSquareClick() {
-				if (this.isClicked) return;
+				if (!this.isGameStarted || this.isClicked || (this.isGameStarted && !this.isUserMove)) return;
 
 				let num = Numbers.switchCoordinatesToNumber(this.x, this.y);
 				this.$emit('square-clicked', num);

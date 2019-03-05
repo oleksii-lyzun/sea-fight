@@ -2,7 +2,7 @@
 	<div class="root">
 		<div class="deck-user">
 			<BattleFieldUserSquare
-				v-for="square in startDeck"
+				v-for="square in stateStartDeck"
 				:key="`${square.xAxis}${square.yAxis}`"
 				:x="square.xAxis"
 				:y="square.yAxis"
@@ -78,6 +78,16 @@
 		},
 		totalShipsCnt() {
 			return this.ships.length;
+		},
+		isGameStarted() {
+			return this.$store.state.gameStarted;
+		},
+		stateStartDeck() {
+			if (this.isGameStarted) {
+				return this.$store.state.userStartDeck;
+			} else {
+				return this.startDeck;
+			}
 		}
 	},
 	methods: {
@@ -89,8 +99,9 @@
 					ship = [...ship, [...forbidden]];
 					return ship;
 				});
-
-				console.log('markedUser', this.ships);
+				this.$store.commit('initializeUserStartDeck', this.startDeck);
+				this.$store.commit('initializeUserShips', this.ships);
+				this.$store.commit('startGame');
 			}
 		},
 		refreshAllShips() {

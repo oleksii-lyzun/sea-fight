@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Numbers from './helpers/Numbers'
 
 Vue.use(Vuex);
 
@@ -7,13 +8,28 @@ export default new Vuex.Store({
   state: {
     computerStartDeck: [],
     computerShips: [],
+
+    userStartDeck: [],
+    userShips: [],
+
+    gameStarted: false,
+    userMove: 1,
   },
   mutations: {
+    startGame(state) {
+      state.gameStarted = true;
+    },
     initializeComputerStartDeck(state, payload) {
       state.computerStartDeck = payload;
     },
     initializeComputerShips(state, ships) {
       state.computerShips = ships;
+    },
+    initializeUserStartDeck(state, payload) {
+      state.userStartDeck = payload;
+    },
+    initializeUserShips(state, ships) {
+      state.userShips = ships;
     },
     setUserShot(state, squareIdx) {
       state.computerStartDeck[squareIdx].clicked = true;
@@ -36,7 +52,21 @@ export default new Vuex.Store({
           }
           return ship;
         }).filter(ship => ship.length > 1);
+      } else {
+        state.userMove = 0;
+        this.commit('setComputerShot');
       }
     },
+    setComputerShot(state) {
+      let squareIndex = Numbers.getRandomInt(this.getters.allowedUserSquares.length);
+      state.userStartDeck[squareIndex].clicked = true;
+
+      state.userMove = 1;
+    },
   },
+  getters: {
+    allowedUserSquares: state => {
+      return state.userStartDeck.filter(sq => sq.clicked !== true);
+    }
+  }
 })

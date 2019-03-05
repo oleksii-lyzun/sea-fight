@@ -1,8 +1,8 @@
 <template>
 	<div
-		class="user-square"
+		class="user-square c-pointer"
 		:class="
-			[ markStatus === 2 ? 'marked' : '' ]"
+			[ showMarked ? 'marked' : '', showMissed ? 'missed' : '' ]"
 		@click="onSquareClick()"
 	>
 		{{ x }}:{{ y }}
@@ -37,8 +37,25 @@
 				required: true,
 			}
 		},
+		computed: {
+			isGameStarted() {
+				return this.$store.state.gameStarted;
+			},
+			isUserMove() {
+				return this.$store.state.userMove === 1;
+			},
+			showMarked() {
+				if (this.markStatus === 2 && !this.isGameStarted) return true;
+				if (this.markStatus === 2 && ( this.isGameStarted && this.isClicked )) return true;
+			},
+			showMissed() {
+				if (( this.isGameStarted && this.isClicked ) && this.markStatus !== 2) return true;
+			}
+		},
 		methods: {
 			onSquareClick() {
+				if (this.isGameStarted && this.isUserMove) return;
+
 				let num = Numbers.switchCoordinatesToNumber(this.x, this.y);
 				this.clicked = this.markStatus !== 2;
 
@@ -53,7 +70,7 @@
 	.user-square {
 		width: 30px;
 		height: 30px;
-		border: 1px solid #696969;
+		margin: 1px;
 		background-color: #1E90FF;
 	}
 

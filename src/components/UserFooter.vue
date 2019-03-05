@@ -1,20 +1,23 @@
 <template>
-	<div v-if="!shipsPlacedCorrectly" class="chart">
-		<circle-chart :val="percentOfFourShips"></circle-chart>
-		<circle-chart :val="percentOfThreeShips"></circle-chart>
-		<circle-chart :val="percentOfTwoShips"></circle-chart>
-		<circle-chart :val="percentOfOneShip"></circle-chart>
-	</div>
-	<div v-else class="button c-pointer">
-		<div class="success" @click="userAction('start')">
-			<font-awesome-icon icon="check-circle"></font-awesome-icon>
-			<span class="button-start">START</span>
+	<div v-if="!isGameStarted">
+		<div v-if="!shipsPlacedCorrectly" class="chart">
+			<circle-chart :val="percentOfFourShips"></circle-chart>
+			<circle-chart :val="percentOfThreeShips"></circle-chart>
+			<circle-chart :val="percentOfTwoShips"></circle-chart>
+			<circle-chart :val="percentOfOneShip"></circle-chart>
 		</div>
-		<div class="refresh" @click="userAction('refresh')">
-			<font-awesome-icon icon="sync-alt"></font-awesome-icon>
-			<span class="button-refresh">REFRESH</span>
+		<div v-else class="button c-pointer">
+			<div class="success" @click="userAction('start')">
+				<font-awesome-icon icon="check-circle"></font-awesome-icon>
+				<span class="button-start">START</span>
+			</div>
+			<div class="refresh" @click="userAction('refresh')">
+				<font-awesome-icon icon="sync-alt"></font-awesome-icon>
+				<span class="button-refresh">REFRESH</span>
+			</div>
 		</div>
 	</div>
+	<div v-else></div>
 </template>
 
 <script>
@@ -49,9 +52,11 @@ export default {
 			if (!this.cnt) return false;
 
 			let s = this.cnt;
-			console.log('Correct: ', s.one === 4 && s.two === 3 && s.three === 2 && s.four === 1);
 			return s.one === 4 && s.two === 3 && s.three === 2 && s.four === 1;
-		}
+		},
+		isGameStarted() {
+			return this.$store.state.gameStarted;
+		},
 	},
 	methods: {
 		userAction(status) {
