@@ -102,6 +102,7 @@
 				this.$store.commit('initializeUserStartDeck', this.startDeck);
 				this.$store.commit('initializeUserShips', this.ships);
 				this.$store.commit('startGame');
+				console.log('ships', this.ships);
 			}
 		},
 		refreshAllShips() {
@@ -123,7 +124,6 @@
 			if (diagonalClick) return;
 
 			this.updateShips(squareNumber, clickedStatus);
-			console.log('this.ships', this.ships);
 		},
 		updateShips(squareNumber, clickedStatus) {
 			if (clickedStatus) {
