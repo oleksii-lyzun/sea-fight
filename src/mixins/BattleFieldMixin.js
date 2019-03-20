@@ -5,6 +5,7 @@ export default {
         return {
             ships: [],
             startDeck: [],
+            gameOver: false,
 
             /*
                 Defines a proper map for specified square
@@ -19,6 +20,11 @@ export default {
 			zerosMap: [-10, -9, +1, +10, +11],
             ninesMap: [-11, -10, -1, +9, +10],
 			generalMap: [-11, -10, -9, -1, +1, +9, +10, +11],
+        }
+    },
+    computed: {
+        isGameEnded() {
+            return this.$store.state.gameEnded;
         }
     },
     created() {
@@ -65,5 +71,10 @@ export default {
                 }
             }
         },
-    }
+    },
+    watch: {
+        isGameEnded(newValue) {
+            if (newValue) this.gameOver = true;
+        }
+    },
 }

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <battle-field-computer></battle-field-computer>
-    <battle-field-user></battle-field-user>
+    <battle-field-computer class="m-right-20"></battle-field-computer>
+    <battle-field-user class="m-left-20"></battle-field-user>
   </div>
 </template>
 
@@ -14,7 +14,7 @@ export default {
   components: {
     BattleFieldUser,
     BattleFieldComputer
-  }
+  },
 }
 </script>
 
@@ -24,9 +24,10 @@ export default {
 
 #app {
   display: flex;
-  width: 800px;
+  width: 100%;
+  min-width: 700px;
   flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
 }
 </style>

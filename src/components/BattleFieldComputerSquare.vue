@@ -1,15 +1,13 @@
 <template>
 	<div
-		class="computer-square"
+		class="computer-square c-pointer"
 		:class="
 			[
 				(isClicked) && markStatus === 2 ? 'marked' : '',
 				(isClicked) && markStatus !== 2 ? 'missed' : ''
 			]"
 		@click="onSquareClick()"
-	>
-		{{ x }}:{{ y }}
-	</div>
+	></div>
 </template>
 
 <script>
@@ -48,7 +46,10 @@
 		},
 		methods: {
 			onSquareClick() {
+				let gameEnded = this.$store.state.gameEnded;
+
 				if (!this.isGameStarted || this.isClicked || (this.isGameStarted && !this.isUserMove)) return;
+				if (gameEnded) return;
 
 				let num = Numbers.switchCoordinatesToNumber(this.x, this.y);
 				this.$emit('square-clicked', num);
@@ -61,7 +62,7 @@
 	.computer-square {
 		width: 30px;
 		height: 30px;
-		border: 1px solid #696969;
+		margin: 1px;
 		background-color: #1E90FF;
 	}
 

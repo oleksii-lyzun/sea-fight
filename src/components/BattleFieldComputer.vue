@@ -1,20 +1,25 @@
 <template>
-	<div class="deck-computer">
-		<battle-field-computer-square
-			v-for="(square, idx) in stateStartDeck"
-			:key="idx"
-			:x="square.xAxis"
-			:y="square.yAxis"
-			:mark-status="square.marked"
-			:is-clicked="square.clicked"
-			@square-clicked="squareWasClicked"
-		></battle-field-computer-square>
-	</div>
+    <div class="root">
+        <common-header participant="computer"></common-header>
+
+        <div class="deck-computer">
+            <battle-field-computer-square
+                    v-for="(square, idx) in stateStartDeck"
+                    :key="idx"
+                    :x="square.xAxis"
+                    :y="square.yAxis"
+                    :mark-status="square.marked"
+                    :is-clicked="square.clicked"
+                    @square-clicked="squareWasClicked"
+            ></battle-field-computer-square>
+        </div>
+    </div>
 </template>
 
 <script>
 // Components
 import BattleFieldComputerSquare from './BattleFieldComputerSquare.vue';
+import CommonHeader from './CommonHeader.vue';
 // Mixins and helpers
 import BattleFieldMixin from '../mixins/BattleFieldMixin.js';
 import Numbers from '../helpers/Numbers';
@@ -23,7 +28,8 @@ export default {
     name: "BattleFieldComputer",
     mixins: [BattleFieldMixin],
     components: {
-			BattleFieldComputerSquare
+        BattleFieldComputerSquare,
+        CommonHeader,
 		},
 	props: {
 		rows: {
@@ -201,12 +207,12 @@ export default {
 </script>
 
 <style scoped lang="less">
-	.deck-computer {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-around;
-		align-items: center;
-		width: 320px;
-		height: 320px;
-	}
+.deck-computer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    width: 320px;
+    height: 320px;
+}
 </style>

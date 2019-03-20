@@ -1,21 +1,7 @@
 export default class StoreComputer {
     
-    /*
-        Find a ship by given squareIndex
-        Returns Object 
-        Object.i -> index of ship in ships array
-        Object.l -> length of this ship
-    */
-    static findShip(ships, squareIndex) {
-        let ship = {};
-
-        ships.map((el, idx) => {
-            if (el.indexOf(squareIndex) !== -1) {
-                ship = { i: idx, l: el.length };
-            }
-        });
-
-        return ship;
+    static logShot(who, num) {
+        console.log(`${who} shoot square number ${num}\n`);
     }
 
     static deleteSquareFromShip(ships, idx) {

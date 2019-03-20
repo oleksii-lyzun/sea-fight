@@ -4,9 +4,7 @@
 		:class="
 			[ showMarked ? 'marked' : '', showMissed ? 'missed' : '' ]"
 		@click="onSquareClick()"
-	>
-		{{ x }}:{{ y }}
-	</div>
+	></div>
 </template>
 
 <script>
@@ -54,7 +52,9 @@
 		},
 		methods: {
 			onSquareClick() {
+				let gameEnded = this.$store.state.gameEnded;
 				if (this.isGameStarted && this.isUserMove) return;
+				if (gameEnded) return;
 
 				let num = Numbers.switchCoordinatesToNumber(this.x, this.y);
 				this.clicked = this.markStatus !== 2;
@@ -79,6 +79,7 @@
 	}
 
 	.missed {
-		background-color: #FF69B4;
+		background-color: #FFF;
+		transition: background-color 2s ease;
 	}
 </style>

@@ -1,10 +1,16 @@
 <template>
-	<div v-if="!isGameStarted">
-		<div v-if="!shipsPlacedCorrectly" class="chart">
+	<div v-if="!isGameStarted || isGameEnded">
+		<div v-if="!shipsPlacedCorrectly && !isGameEnded" class="chart">
 			<circle-chart :val="percentOfFourShips"></circle-chart>
 			<circle-chart :val="percentOfThreeShips"></circle-chart>
 			<circle-chart :val="percentOfTwoShips"></circle-chart>
 			<circle-chart :val="percentOfOneShip"></circle-chart>
+		</div>
+		<div v-else-if="isGameEnded" class="button c-pointer">
+			<div class="success width-100" @click="startNewGame">
+				<font-awesome-icon icon="check-circle"></font-awesome-icon>
+				<span class="button-start">START NEW GAME</span>
+			</div>
 		</div>
 		<div v-else class="button c-pointer">
 			<div class="success" @click="userAction('start')">
@@ -27,7 +33,9 @@ export default {
 	name: "UserFooter",
 	components: { CircleChart },
 	data() {
-		return {}
+		return {
+			gameOver: false,
+		}
 	},
 	props: {
 		cnt: {
@@ -57,17 +65,27 @@ export default {
 		isGameStarted() {
 			return this.$store.state.gameStarted;
 		},
+		isGameEnded() {
+			return this.$store.state.gameEnded;
+		},
 	},
 	methods: {
 		userAction(status) {
 			this.$emit('user-started-game', status);
+		},
+		startNewGame(){
+			window.location.reload();
 		}
-	}
+	},
+	watch: {
+		isGameEnded(newValue) {
+			if (newValue) this.gameOver = true;
+		}
+	},
 }
 </script>
 
 <style scoped lang="less">
-
 .chart, .button {
 	width: 320px;
 	height: 90px;

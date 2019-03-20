@@ -14,9 +14,10 @@ export default new Vuex.Store({
     userShips: [],
 
     gameStarted: false,
+    gameEnded: false,
     userMove: 1,
     lastHit: [],
-    squareMap: [],
+    squareMap: []
   },
   mutations: {
     startGame(state) {
@@ -36,6 +37,7 @@ export default new Vuex.Store({
     },
     setUserShot(state, squareIdx) {
       state.computerStartDeck[squareIdx].clicked = true;
+      StoreComputer.logShot('User', squareIdx);
 
       if (state.computerStartDeck[squareIdx].marked === 2) {
         /* deleting marked square from a ship */
@@ -55,6 +57,9 @@ export default new Vuex.Store({
           }
           return ship;
         }).filter(ship => ship.length > 1);
+
+        if (state.computerShips.length === 0) state.gameEnded = true;
+
       } else {
         state.userMove = 0;
         this.commit('setComputerShot');
@@ -73,6 +78,7 @@ export default new Vuex.Store({
       }
 
       state.userStartDeck[squareIndex].clicked = true;
+      StoreComputer.logShot('Computer', squareIndex);
 
       let hit = state.userStartDeck[squareIndex].marked === 2;
       let isOneSquareShip = false;
@@ -90,6 +96,8 @@ export default new Vuex.Store({
           }
           return ship;
         }).filter(ship => ship.length > 1);
+
+        if (state.userShips.length === 0) return state.gameEnded = true;
 
         if (isOneSquareShip) {
             state.lastHit = [];

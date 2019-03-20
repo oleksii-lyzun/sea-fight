@@ -1,6 +1,8 @@
 <template>
 	<div class="root">
-		<div class="deck-user">
+        <common-header participant="user"></common-header>
+
+        <div class="deck-user">
 			<BattleFieldUserSquare
 				v-for="square in stateStartDeck"
 				:key="`${square.xAxis}${square.yAxis}`"
@@ -19,6 +21,7 @@
 	// Components
 	import BattleFieldUserSquare from './BattleFieldUserSquare.vue';
 	import UserFooter from './UserFooter';
+    import CommonHeader from './CommonHeader.vue';
 	// Mixins and helpers
 	import BattleFieldMixin from '../mixins/BattleFieldMixin.js';
 	import Arrays from '../helpers/Arrays';
@@ -28,7 +31,8 @@
 	mixins: [BattleFieldMixin],
 	components: {
 		BattleFieldUserSquare,
-		UserFooter
+		UserFooter,
+        CommonHeader,
 	},
 	props: {
 		rows: {
@@ -88,7 +92,7 @@
 			} else {
 				return this.startDeck;
 			}
-		}
+		},
 	},
 	methods: {
 		gameStartRequest(status) {
@@ -279,17 +283,16 @@
 			return isForbidden;
 		},
 	},
-
 }
 </script>
 
 <style scoped lang="less">
-	.deck-user {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-around;
-		align-items: center;
-		width: 320px;
-		height: 320px;
-	}
+.deck-user {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    width: 320px;
+    height: 320px;
+}
 </style>
