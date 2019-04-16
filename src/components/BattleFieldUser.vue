@@ -106,7 +106,6 @@
 				this.$store.commit('initializeUserStartDeck', this.startDeck);
 				this.$store.commit('initializeUserShips', this.ships);
 				this.$store.commit('startGame');
-				console.log('ships', this.ships);
 			}
 		},
 		refreshAllShips() {
@@ -287,12 +286,12 @@
 </script>
 
 <style scoped lang="less">
-.deck-user {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-    width: 320px;
-    height: 320px;
-}
+	.deck-user {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-around;
+		align-items: center;
+		width: 320px;
+		height: 320px;
+	}
 </style>

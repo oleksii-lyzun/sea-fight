@@ -207,12 +207,12 @@ export default {
 </script>
 
 <style scoped lang="less">
-.deck-computer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-    width: 320px;
-    height: 320px;
-}
+    .deck-computer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+        width: 320px;
+        height: 320px;
+    }
 </style>

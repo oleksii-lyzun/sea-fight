@@ -17,7 +17,16 @@ export default new Vuex.Store({
     gameEnded: false,
     userMove: 1,
     lastHit: [],
-    squareMap: []
+    squareMap: [],
+
+    logger: [],
+  },
+  actions: {
+    setComputerShotAction({commit}) {
+      setTimeout(() => {
+        commit('setComputerShot');
+      }, 3000)
+    }
   },
   mutations: {
     startGame(state) {
@@ -35,14 +44,14 @@ export default new Vuex.Store({
     initializeUserShips(state, ships) {
       state.userShips = ships;
     },
-    setUserShot(state, squareIdx) {
-      state.computerStartDeck[squareIdx].clicked = true;
-      StoreComputer.logShot('User', squareIdx);
+    setUserShot(state, squareIndex) {
+      state.computerStartDeck[squareIndex].clicked = true;
+      state.logger.push(`User shoot square number ${squareIndex}\n`);
 
-      if (state.computerStartDeck[squareIdx].marked === 2) {
+      if (state.computerStartDeck[squareIndex].marked === 2) {
         /* deleting marked square from a ship */
         state.computerShips = state.computerShips.map(ship => {
-          return ship.filter(el => el !== squareIdx);
+          return ship.filter(el => el !== squareIndex);
         });
 
         /*
@@ -62,7 +71,7 @@ export default new Vuex.Store({
 
       } else {
         state.userMove = 0;
-        this.commit('setComputerShot');
+        this.dispatch('setComputerShotAction');
       }
     },
     setComputerShot(state) {
@@ -78,7 +87,7 @@ export default new Vuex.Store({
       }
 
       state.userStartDeck[squareIndex].clicked = true;
-      StoreComputer.logShot('Computer', squareIndex);
+      state.logger.push(`Computer shoot square number ${squareIndex}\n`);
 
       let hit = state.userStartDeck[squareIndex].marked === 2;
       let isOneSquareShip = false;
@@ -109,6 +118,7 @@ export default new Vuex.Store({
             return this.commit('setComputerShot');
         }
       } else {
+          state.squareMap = StoreComputer.getMapForFutureHits(state.lastHit, state.userStartDeck);
           state.userMove = 1;
       }
     },

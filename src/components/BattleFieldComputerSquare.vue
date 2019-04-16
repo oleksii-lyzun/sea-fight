@@ -68,9 +68,11 @@
 
 	.marked {
 		background-color: #ADFF2F;
+		transition: background-color 2s ease;
 	}
 
 	.missed {
 		background-color: #FFF;
+		transition: background-color 2s ease;
 	}
 </style>

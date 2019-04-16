@@ -2,7 +2,7 @@
 	<div
 		class="user-square c-pointer"
 		:class="
-			[ showMarked ? 'marked' : '', showMissed ? 'missed' : '' ]"
+			[ showMarked ? 'marked' : '', showMissed ? 'missed' : '', isGameStarted ? 'trans' : '' ]"
 		@click="onSquareClick()"
 	></div>
 </template>
@@ -80,6 +80,9 @@
 
 	.missed {
 		background-color: #FFF;
+	}
+
+	.trans {
 		transition: background-color 2s ease;
 	}
 </style>

@@ -1,37 +1,59 @@
 <template>
 	<div v-if="!isGameStarted || isGameEnded">
 		<div v-if="!shipsPlacedCorrectly && !isGameEnded" class="chart">
-			<circle-chart :val="percentOfFourShips"></circle-chart>
-			<circle-chart :val="percentOfThreeShips"></circle-chart>
-			<circle-chart :val="percentOfTwoShips"></circle-chart>
-			<circle-chart :val="percentOfOneShip"></circle-chart>
+			<circle-chart v-tooltip="'Four-square ships'" :val="percentOfFourShips"></circle-chart>
+			<circle-chart v-tooltip="'Three-square ships'" :val="percentOfThreeShips"></circle-chart>
+			<circle-chart v-tooltip="'Two-square ships'" :val="percentOfTwoShips"></circle-chart>
+			<circle-chart v-tooltip="'One-square ships'" :val="percentOfOneShip"></circle-chart>
 		</div>
 		<div v-else-if="isGameEnded" class="button c-pointer">
-			<div class="success width-100" @click="startNewGame">
-				<font-awesome-icon icon="check-circle"></font-awesome-icon>
-				<span class="button-start">START NEW GAME</span>
-			</div>
+			<Button
+					width="100%"
+					height="100%"
+					caption="START NEW GAME"
+					class="success"
+					@click.native="startNewGame"
+			>
+				<template v-slot:fontAwesome>
+					<font-awesome-icon class="button-start" icon="check-circle"></font-awesome-icon>
+				</template>
+			</Button>
 		</div>
 		<div v-else class="button c-pointer">
-			<div class="success" @click="userAction('start')">
-				<font-awesome-icon icon="check-circle"></font-awesome-icon>
-				<span class="button-start">START</span>
-			</div>
-			<div class="refresh" @click="userAction('refresh')">
-				<font-awesome-icon icon="sync-alt"></font-awesome-icon>
-				<span class="button-refresh">REFRESH</span>
-			</div>
+			<Button
+					width="50%"
+					height="100%"
+					caption="START"
+					class="success"
+					@click.native="userAction('start')"
+			>
+				<template v-slot:fontAwesome>
+					<font-awesome-icon class="button-start" icon="check-circle"></font-awesome-icon>
+				</template>
+			</Button>
+			<Button
+					width="50%"
+					height="100%"
+					caption="REFRESH"
+					class="refresh"
+					@click.native="userAction('refresh')"
+			>
+				<template v-slot:fontAwesome>
+					<font-awesome-icon class="button-refresh" icon="sync-alt"></font-awesome-icon>
+				</template>
+			</Button>
 		</div>
 	</div>
 	<div v-else></div>
 </template>
 
 <script>
-import CircleChart from './CircleChart.vue';
+import Button from './Button';
+import CircleChart from './CircleChart';
 
 export default {
 	name: "UserFooter",
-	components: { CircleChart },
+	components: { CircleChart, Button },
 	data() {
 		return {
 			gameOver: false,
@@ -106,7 +128,7 @@ export default {
 	}
 
 	&-start, &-refresh {
-		margin-left: 5px;
+		margin-right: 5px;
 	}
 }
 </style>

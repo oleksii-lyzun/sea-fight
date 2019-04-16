@@ -1,8 +1,4 @@
 export default class StoreComputer {
-    
-    static logShot(who, num) {
-        console.log(`${who} shoot square number ${num}\n`);
-    }
 
     static deleteSquareFromShip(ships, idx) {
         return ships.map(ship => {
@@ -41,16 +37,11 @@ export default class StoreComputer {
         let first = parseInt(hits[0]);
         let last = parseInt(hits[hits.length - 1]);
         let diff = last - first;
-        console.log('diff', diff);
 
         if (diff > -4 && diff < 4) {
-            let j = StoreComputer.getMapHorizontal(first, last, userDeck);
-            console.log('j', j);
-            return j;
+            return StoreComputer.getMapHorizontal(first, last, userDeck);
         } else {
-            let l = StoreComputer.getMapVertical(first, last, userDeck);
-            console.log('l', l);
-            return l;
+            return StoreComputer.getMapVertical(first, last, userDeck);
         }
     }
 
